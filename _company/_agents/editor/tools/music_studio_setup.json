@@ -1,0 +1,42 @@
+{
+  "MODEL": "",
+  "INSTALL_DIR": "",
+  "_schema": {
+    "MODEL": {
+      "type": "select",
+      "label": "🎵 음악 모델",
+      "hint": "비워두면 small 자동 선택 (모든 기기 안전). 큰 모델은 명시 RAM의 1.5~2배 실제 압박",
+      "options": [
+        {
+          "value": "",
+          "label": "(자동 — 항상 small, 가장 안전)"
+        },
+        {
+          "value": "musicgen-small",
+          "label": "⚡ MusicGen Small  (300MB · 4GB+ RAM · 빠름)"
+        },
+        {
+          "value": "musicgen-medium",
+          "label": "⚖️ MusicGen Medium (1.5GB · 8GB+ RAM · 균형)"
+        },
+        {
+          "value": "musicgen-large",
+          "label": "🎼 MusicGen Large  (3.3GB · 16GB+ RAM · 좋음)"
+        },
+        {
+          "value": "acestep-base",
+          "label": "🎹 ACE-Step Base   (10GB · 16GB+ Mac · 우수)"
+        },
+        {
+          "value": "acestep-xl",
+          "label": "🎻 ACE-Step XL     (15GB · 32GB+ 머신 · 최고)"
+        }
+      ]
+    },
+    "INSTALL_DIR": {
+      "type": "text",
+      "label": "📁 설치 위치",
+      "hint": "비워두면 ~/connect-ai-music/. 외장 디스크 등 변경 가능"
+    }
+  }
+}

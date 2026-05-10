@@ -1,0 +1,57 @@
+{
+  "YOUTUBE_API_KEY": "",
+  "MY_CHANNEL_HANDLE": "",
+  "MY_CHANNEL_ID": "",
+  "WATCHED_CHANNELS": [],
+  "COMPETITOR_CHANNELS": [],
+  "TELEGRAM_BOT_TOKEN": "",
+  "TELEGRAM_CHAT_ID": "",
+  "OLLAMA_URL": "http://127.0.0.1:11434",
+  "MODEL": "",
+  "_schema": {
+    "YOUTUBE_API_KEY": {
+      "label": "🔑 YouTube Data API 키",
+      "hint": "Google Cloud Console → API & Services → 사용자 인증 정보에서 발급. 트렌드/통계 조회용 (일일 quota 10,000)."
+    },
+    "MY_CHANNEL_HANDLE": {
+      "label": "📺 내 채널 핸들",
+      "hint": "@로 시작하는 채널 핸들 (예: @leoyt). 안 적어도 ID만 있으면 동작."
+    },
+    "MY_CHANNEL_ID": {
+      "label": "🆔 내 채널 ID",
+      "hint": "UC로 시작하는 24자 ID. studio.youtube.com → 설정 → 채널 → 고급 설정에서 확인."
+    },
+    "WATCHED_CHANNELS": {
+      "label": "👀 모니터링 채널들",
+      "hint": "내가 정기적으로 추적하고 싶은 채널 핸들. 트렌드 스나이퍼가 새 영상을 잡아옴."
+    },
+    "COMPETITOR_CHANNELS": {
+      "label": "🎯 경쟁 채널들",
+      "hint": "벤치마킹할 채널 핸들. 비교 분석에 사용."
+    },
+    "TELEGRAM_BOT_TOKEN": {
+      "label": "🤖 Telegram Bot 토큰",
+      "hint": "@BotFather에서 /newbot으로 발급. 형식: 123456789:AAH..."
+    },
+    "TELEGRAM_CHAT_ID": {
+      "label": "💬 Telegram Chat ID",
+      "hint": "봇과 첫 대화 시작 후 자동 채워짐. 직접 입력하지 않아도 됨."
+    },
+    "OLLAMA_URL": {
+      "label": "🧠 LLM 서버 주소",
+      "hint": "로컬 Ollama/LM Studio 엔드포인트. 보통 그대로 두면 됨."
+    },
+    "MODEL": {
+      "label": "🎚 사용할 모델",
+      "hint": "비워두면 설치된 모델 중 가장 작은 것 자동. 직접 지정하려면 모델명 (예: gemma2:2b)."
+    },
+    "YOUTUBE_OAUTH_CLIENT_ID": {
+      "label": "🔓 OAuth Client ID",
+      "hint": "Google Cloud → OAuth 2.0 클라이언트 ID. 댓글 답글·통계 등 인증 필요한 기능에 사용."
+    },
+    "YOUTUBE_OAUTH_CLIENT_SECRET": {
+      "label": "🔐 OAuth Client Secret",
+      "hint": "OAuth 클라이언트 ID와 같이 발급되는 비밀 키. Authorized redirect URI: http://127.0.0.1:5814/yt-oauth-callback"
+    }
+  }
+}
