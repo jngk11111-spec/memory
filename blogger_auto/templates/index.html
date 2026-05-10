@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogBot - 블로그스팟 자동 포스팅</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo"><span class="logo-icon">🚀</span><h1>BlogBot</h1></div>
+            <p class="logo-sub">블로그스팟 자동 포스팅</p>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" data-tab="dashboard" id="nav-dashboard"><span class="nav-icon">📊</span><span>대시보드</span></button>
+            <button class="nav-btn" data-tab="trends" id="nav-trends"><span class="nav-icon">🔥</span><span>트렌드</span></button>
+            <button class="nav-btn" data-tab="write" id="nav-write"><span class="nav-icon">✍️</span><span>글 작성</span></button>
+            <button class="nav-btn" data-tab="posts" id="nav-posts"><span class="nav-icon">📋</span><span>게시물 관리</span></button>
+            <button class="nav-btn" data-tab="bulk" id="nav-bulk"><span class="nav-icon">📦</span><span>대량 포스팅</span></button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn btn-secondary btn-full" style="margin-bottom: 12px;" onclick="openSettingsModal()">
+                <span>⚙️</span> AI 설정
+            </button>
+            <div class="auth-section" id="auth-section">
+                <div class="auth-status" id="auth-status"><span class="status-dot offline"></span><span>미연결</span></div>
+                <button class="btn btn-login" id="btn-login" onclick="handleLogin()"><span>🔑</span> Google 로그인</button>
+            </div>
+        </div>
+    </aside>
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left"><button class="menu-toggle" onclick="toggleSidebar()">☰</button><h2 id="page-title">대시보드</h2></div>
+            <div class="header-right"><select class="blog-select" id="blog-select" onchange="onBlogChange()"><option value="">블로그를 선택하세요</option></select></div>
+        </header>
+        <div class="content-area">
+            <!-- 대시보드 -->
+            <section class="tab-content active" id="tab-dashboard">
+                <div class="modal" id="settings-modal">
+                    <div class="modal-content" style="max-width: 500px;">
+                        <div class="modal-header">
+                            <h3>⚙️ AI 설정 (Gemini)</h3>
+                            <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="gemini-api-key">Gemini API Key</label>
+                                <input type="password" id="gemini-api-key" class="form-input" placeholder="AI Key를 입력하세요">
+                                <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                                    * API Key는 브라우저 내부에만 안전하게 저장됩니다.
+                                    <a href="https://aistudio.google.com/app/apikey" target="_blank">키 발급받기</a>
+                                </p>
+                            </div>
+                            <button class="btn btn-primary btn-full" onclick="saveSettings()">저장하기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="welcome-card">
+                    <h2>👋 BlogBot에 오신 것을 환영합니다!</h2>
+                    <p>블로그스팟 자동 포스팅과 트렌드 분석을 한 곳에서 관리하세요.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-info"><span class="stat-value" id="stat-posts">-</span><span class="stat-label">총 게시물</span></div></div>
+                        <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-info"><span class="stat-value" id="stat-blogs">-</span><span class="stat-label">블로그 수</span></div></div>
+                        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-info"><span class="stat-value" id="stat-trends">-</span><span class="stat-label">오늘의 트렌드</span></div></div>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="card"><div class="card-header"><h3>🔥 실시간 인기 키워드</h3><span class="badge">Korea</span></div><div class="card-body"><ul class="trend-mini-list" id="dashboard-trends"><li class="loading-placeholder">로딩 중...</li></ul></div></div>
+                    <div class="card"><div class="card-header"><h3>📝 최근 게시물</h3></div><div class="card-body"><ul class="post-mini-list" id="dashboard-posts"><li class="empty-state">로그인 후 확인 가능합니다</li></ul></div></div>
+                </div>
+            </section>
+            <!-- 트렌드 -->
+            <section class="tab-content" id="tab-trends">
+                <div class="section-header"><h2>🔥 실시간 트렌드</h2>
+                    <div class="section-actions">
+                        <select class="country-select" id="country-select" onchange="loadTrends()"><option value="KR">🇰🇷 한국</option><option value="US">🇺🇸 미국</option><option value="JP">🇯🇵 일본</option><option value="GB">🇬🇧 영국</option><option value="DE">🇩🇪 독일</option><option value="FR">🇫🇷 프랑스</option></select>
+                        <button class="btn btn-secondary" onclick="loadTrends()">🔄 새로고침</button>
+                    </div>
+                </div>
+                <div class="trends-grid" id="trends-container"><div class="loading-state"><div class="spinner"></div><p>트렌드를 불러오는 중...</p></div></div>
+            </section>
+            <!-- 글 작성 -->
+            <section class="tab-content" id="tab-write">
+                <div class="section-header"><h2>✍️ 새 글 작성</h2></div>
+                <div class="write-container">
+                    <div class="form-group"><label for="post-title">제목</label><input type="text" id="post-title" class="form-input" placeholder="게시물 제목을 입력하세요"></div>
+                    <div class="form-group"><label for="post-labels">라벨 (쉼표로 구분)</label><input type="text" id="post-labels" class="form-input" placeholder="예: 기술, 프로그래밍, Python"></div>
+                    <div class="form-group"><label for="post-content">내용 (HTML 지원)</label>
+                        <div class="editor-toolbar">
+                            <button class="toolbar-btn" onclick="insertTag('b')">B</button><button class="toolbar-btn" onclick="insertTag('i')">I</button><button class="toolbar-btn" onclick="insertTag('u')">U</button>
+                            <button class="toolbar-btn" onclick="insertTag('h2')">H2</button><button class="toolbar-btn" onclick="insertTag('h3')">H3</button><button class="toolbar-btn" onclick="insertTag('p')">P</button>
+                            <button class="toolbar-btn" onclick="insertTag('a')">🔗</button><button class="toolbar-btn" onclick="insertTag('blockquote')">❝</button>
+                        </div>
+                        <textarea id="post-content" class="form-textarea" rows="15" placeholder="HTML 콘텐츠를 입력하세요..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <label class="checkbox-label"><input type="checkbox" id="post-draft"><span>임시저장으로 작성</span></label>
+                        <div class="btn-group"><button class="btn btn-secondary" onclick="previewPost()">👁️ 미리보기</button><button class="btn btn-primary" onclick="submitPost()">🚀 발행하기</button></div>
+                    </div>
+                </div>
+                <div class="modal" id="preview-modal"><div class="modal-content"><div class="modal-header"><h3>미리보기</h3><button class="modal-close" onclick="closeModal('preview-modal')">✕</button></div><div class="modal-body"><h2 id="preview-title"></h2><div id="preview-content"></div></div></div></div>
+            </section>
+            <!-- 게시물 관리 -->
+            <section class="tab-content" id="tab-posts">
+                <div class="section-header"><h2>📋 게시물 관리</h2><button class="btn btn-secondary" onclick="loadPosts()">🔄 새로고침</button></div>
+                <div class="posts-list" id="posts-container"><div class="empty-state"><p>블로그를 선택하고 로그인하세요</p></div></div>
+            </section>
+            <!-- 대량 포스팅 -->
+            <section class="tab-content" id="tab-bulk">
+                <div class="section-header"><h2>📦 대량 포스팅</h2></div>
+                <div class="bulk-container">
+                    <div class="card"><div class="card-header"><h3>CSV 파일 업로드</h3></div>
+                        <div class="card-body">
+                            <div class="csv-info"><h4>📄 CSV 형식 안내</h4><p>아래 형식에 맞는 CSV 파일을 업로드하세요:</p><div class="code-block"><code>title,content,labels,draft</code><br><code>글 제목,&lt;p&gt;내용&lt;/p&gt;,"태그1,태그2",false</code></div><p class="hint">* 한글 컬럼명도 지원: 제목, 내용, 라벨, 임시저장</p></div>
+                            <div class="upload-area" id="upload-area"><input type="file" id="csv-file" accept=".csv" onchange="handleFileSelect()" hidden><div class="upload-content" onclick="document.getElementById('csv-file').click()"><span class="upload-icon">📁</span><p>클릭하여 CSV 파일 선택</p></div></div>
+                            <div id="file-info" class="file-info" style="display:none;"><span id="file-name"></span><button class="btn btn-sm btn-danger" onclick="clearFile()">✕</button></div>
+                            <button class="btn btn-primary btn-full" onclick="uploadBulk()" id="btn-bulk-upload" disabled>📦 대량 포스팅 시작</button>
+                        </div>
+                    </div>
+                    <div class="card" id="bulk-results-card" style="display:none;"><div class="card-header"><h3>📊 결과</h3></div><div class="card-body" id="bulk-results"></div></div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- AI 로딩 오버레이 -->
+    <div class="modal" id="ai-loading-modal" style="z-index: 9999;">
+        <div class="modal-content" style="max-width: 400px; text-align: center; background: transparent; border: none; box-shadow: none;">
+            <div class="spinner" style="width: 60px; height: 60px; border-width: 4px;"></div>
+            <h2 style="margin-top: 20px; color: white; font-size: 18px;">🤖 AI가 글을 작성하고 발행 중입니다...</h2>
+            <p style="color: var(--text-secondary); margin-top: 10px; font-size: 14px;">주제에 따라 10~30초 정도 소요될 수 있습니다.</p>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
